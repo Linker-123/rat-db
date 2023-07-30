@@ -143,7 +143,7 @@ impl Database {
         let path = PathBuf::from(format!("./data/{}", db_name));
         create_dir(&path)?;
 
-        let mut metadata_path = path.clone();
+        let mut metadata_path = path;
         metadata_path.push("metadata.bin");
         DatabaseMetadata::create(metadata_path.clone(), db_name)?;
         Ok(())

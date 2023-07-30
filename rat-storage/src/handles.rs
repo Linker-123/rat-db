@@ -7,7 +7,6 @@ use std::{
         atomic::{AtomicBool, AtomicUsize, Ordering},
         Arc,
     },
-    time::Duration, thread,
 };
 
 use crate::{doc::Document, reader::Reader};

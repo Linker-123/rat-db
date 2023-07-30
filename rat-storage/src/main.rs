@@ -1,29 +1,32 @@
-use database::Database;
-use doc::Document;
-use rayon::prelude::{IntoParallelIterator, ParallelIterator};
-use schedule::IntervalManager;
-use std::{collections::HashMap, path::PathBuf, time::Instant};
+use index::SingleIndexManager;
+use std::path::PathBuf;
 
 mod collection;
 mod database;
 mod doc;
 mod handles;
+mod index;
 mod reader;
 mod schedule;
 
 fn main() {
     tracing_subscriber::fmt::init();
-    IntervalManager::init();
+    // IntervalManager::init();
 
-    let mut database = Database::new(PathBuf::from("./data/CoolDatabase/")).unwrap();
-    database.create_collection("users".to_owned()).unwrap();
+    // SingleIndexManager::create_new(
+    //     PathBuf::from("./data/CoolDatabase/index-users-1.bin"),
+    //     "users".to_owned(),
+    //     "id".to_owned(),
+    //     1,
+    // )
+    // .unwrap();
 
-    let collection = database.collection("users").unwrap();
-    let collection = collection.read();
-    let start = Instant::now();
-    (0..1000000)
-        .into_par_iter()
-        .map(|_| collection.write(Document::new(1, HashMap::new()).serialize()))
-        .collect::<Vec<()>>();
-    println!("Elapsed: {:.2?}", start.elapsed());
+    let mut index_manager =
+        SingleIndexManager::new(PathBuf::from("./data/CoolDatabase/index-users-1.bin")).unwrap();
+
+    // index_manager
+    //     .add_index(1, doc::DocumentValue::Integer(20))
+    //     .unwrap();
+
+    println!("{:#?}", index_manager.data);
 }
